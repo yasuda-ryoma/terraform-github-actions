@@ -2,6 +2,9 @@
 set -e
 cd "${TF_ACTION_WORKING_DIR:-.}"
 
+DIRECTORIES=$(sh -c 'find . -type f -name "*.tf" -exec dirname {} \;|sort -u'  2>&1)
+echo "$DIRECTORIES"
+
 set +e
 UNFMT_FILES=$(sh -c "terraform fmt -check=true -write=false $*" 2>&1)
 SUCCESS=$?
