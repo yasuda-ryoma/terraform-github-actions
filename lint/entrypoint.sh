@@ -10,7 +10,12 @@ set +e
 # Iterate through each directory and build up a comment.
 SUCCESS=0
 for dir in $WORKING_DIRS; do
-LINT_COMMENT=$(sh -c "cd $dir && terraform get && tflint --error-with-issues" 2>&1)
+if [ -n "$TF_ACTION_GET" ] ; then
+    LINT_COMMENT=$(sh -c "cd $dir && terraform get && tflint --error-with-issues" 2>&1);
+else
+    LINT_COMMENT=$(sh -c "cd $dir && tflint --error-with-issues" 2>&1);
+fi
+
 RETURN=$?
 echo "$dir"
 echo "$LINT_COMMENT"
