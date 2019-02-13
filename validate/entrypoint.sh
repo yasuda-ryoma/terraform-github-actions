@@ -1,17 +1,23 @@
 #!/bin/sh
 set -e
+set -x 
+
 if $AUTO_SEARCH_TF_DIR ; then
     WORKING_DIRS=$(sh -c 'find . -type f -name "*.tf" -exec dirname {} \;|sort -u'  2>&1)
 else
     WORKING_DIRS="${TF_ACTION_WORKING_DIR:-.}"
 fi
 
-WORKSPACE=${TF_ACTION_WORKSPACE:-default}
-
 # Iterate through each directory and build up a comment.
 SUCCESS=0
 for dir in $WORKING_DIRS; do
-VARIDATE_COMMENT=$(sh -c "cd $dir && terraform workspace select $WORKSPACE && terraform validate -no-color $*" 2>&1)
+
+if $TF_ACTION_WORKSPACE ; then
+    VARIDATE_COMMENT=$(sh -c "cd $dir && terraform workspace select $TF_ACTION_WORKSPACE && terraform validate -no-color $*" 2>&1);
+else
+    VARIDATE_COMMENT=$(sh -c "cd $dir && terraform validate -no-color $*" 2>&1);
+fi
+
 RETURN=$?
 echo "$dir"
 echo "$VARIDATE_COMMENT"
