@@ -12,7 +12,7 @@ fi
 SUCCESS=0
 for dir in $WORKING_DIRS; do
 
-if $TF_ACTION_WORKSPACE ; then
+if [ -n $TF_ACTION_WORKSPACE ] ; then
     VARIDATE_COMMENT=$(sh -c "cd $dir && terraform workspace select $TF_ACTION_WORKSPACE && terraform validate -no-color $*" 2>&1);
 else
     VARIDATE_COMMENT=$(sh -c "cd $dir && terraform validate -no-color $*" 2>&1);
