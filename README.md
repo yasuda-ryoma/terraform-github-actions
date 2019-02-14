@@ -1,4 +1,4 @@
-# Terraform GitHub Actions
+# Terraform GitHub Actions for teamLab
 These official Terraform GitHub Actions allow you to run `terraform fmt`, `validate`
  and `plan` on your pull requests to help you review and validate Terraform changes.
 
@@ -18,3 +18,6 @@ Runs `terraform validate` and comments back on error.
 ### Plan Action
 Runs `terraform plan` and comments back with the output.
 <img src="./assets/plan.png" alt="Terraform Plan Action" width="80%" />
+
+### Lint Action
+Runs `tflint` and comments back with the output.
