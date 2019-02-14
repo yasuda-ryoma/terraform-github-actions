@@ -1,9 +1,25 @@
 #!/bin/sh
 set -e
+
 if $AUTO_SEARCH_TF_DIR ; then
     WORKING_DIRS=$(sh -c 'find . -type f -name "*.tf" -exec dirname {} \;|sort -u'  2>&1)
 else
     WORKING_DIRS="${TF_ACTION_WORKING_DIR:-.}"
+fi
+
+if [ -n "$INFRA_BOOKING_CORE_SSH_KEY" ] ; then
+    # Prepare SSH key and settings to be able to pull TF modules from Github
+    mkdir -p $HOME/.ssh/
+    echo "$INFRA_BOOKING_CORE_SSH_KEY" > $HOME/.ssh/id_rsa
+    chmod 600 $HOME/.ssh/id_rsa
+    
+    echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+    echo "Host github \n HostName github.com
+    User git
+    IdentityFile $HOME/.ssh/id_rsa
+    IdentitiesOnly yes" >> /etc/ssh/ssh_config
+    
+    git config --global url."git@github.com:".insteadOf "https://github.com/"
 fi
 
 set +e
