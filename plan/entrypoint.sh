@@ -51,25 +51,36 @@ for dir in ${TF_ACTION_WORKING_DIR_PATHS//:/ }; do
   COMMENT=""
 
   # If not successful, post failed plan output.
+  # Comment text contents are based on Github Markdown
   if [ $SUCCESS -ne 0 ]; then
-      COMMENT="#### \`terraform plan\` on $dir $RED FAILED
-  #############################
-  \`\`\`
-  <details>
-  <summary>Cick to see details</summary>
-  $OUTPUT
-  </details>
-  \`\`\`"
+COMMENT="### Terraform Plan Result ($dir)
+
+\`\`\`diff
+- \`terraform plan\` on directory $dir FAILED
+\`\`\`
+---
+<details>
+<summary>Cick to see details</summary>
+
+\`\`\`
+$OUTPUT
+\`\`\`
+</details>"
   else
       FMT_PLAN=$(echo "$OUTPUT" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
-      COMMENT="\`\`\`diff
-  #### \`terraform plan\` on $dir $GREEN SUCCEEDED
-  #############################
-  <details>
-  <summary>Cick to see details</summary>
-  $FMT_PLAN
-  </details>
-  \`\`\`"
+      COMMENT="### Terraform Plan Result ($dir)
+
+\`\`\`diff
++ \`terraform plan\` on $dir SUCCEEDED
+\`\`\`
+---
+<details><summary>Cick to see details</summary>
+
+\`\`\`diff
+$FMT_PLAN
+aaaa
+\`\`\`
+</details>"
   fi
 
   PAYLOAD=$(echo '{}' | jq --arg body "$COMMENT" '.body = $body')
