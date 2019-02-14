@@ -2,9 +2,6 @@
 set -e
 
 ############## CONFIGURATION
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-NC='\033[0m'
 
 if [ -n "$INFRA_BOOKING_CORE_SSH_KEY" ] ; then
     # Prepare SSH key and settings to be able to pull TF modules from Github
