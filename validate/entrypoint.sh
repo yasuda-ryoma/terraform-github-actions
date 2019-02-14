@@ -13,23 +13,23 @@ SUCCESS=0
 for dir in $WORKING_DIRS; do
 
 if [ -n "$TF_ACTION_WORKSPACE" ] ; then
-    VARIDATE_COMMENT=$(sh -c "cd $dir && terraform workspace select $TF_ACTION_WORKSPACE && terraform validate -no-color $*" 2>&1);
+    VALIDATE_COMMENT=$(sh -c "cd $dir && terraform workspace select $TF_ACTION_WORKSPACE && terraform validate -no-color $*" 2>&1);
 else
-    VARIDATE_COMMENT=$(sh -c "cd $dir && terraform validate -no-color $*" 2>&1);
+    VALIDATE_COMMENT=$(sh -c "cd $dir && terraform validate -no-color $*" 2>&1);
 fi
 
 RETURN=$?
 echo "$dir"
-echo "$VARIDATE_COMMENT"
+echo "$VALIDATE_COMMENT"
 if [ $RETURN -eq 0 ]; then
     continue
 fi
 SUCCESS=$RETURN
-VARIDATE_OUTPUT="$VARIDATE_OUTPUT
+VALIDATE_OUTPUT="$VALIDATE_OUTPUT
 <summary><code>$dir</code></summary>
 
 \`\`\`
-$VARIDATE_COMMENT
+$VALIDATE_COMMENT
 \`\`\`
 
 "
