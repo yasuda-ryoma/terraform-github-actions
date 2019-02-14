@@ -75,7 +75,6 @@ $OUTPUT
 
 \`\`\`diff
 $FMT_PLAN
-aaaa
 \`\`\`
 </details>"
   fi
