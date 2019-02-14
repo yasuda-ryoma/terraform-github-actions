@@ -2,6 +2,9 @@
 set -e
 
 ############## CONFIGURATION
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NC='\033[0m'
 
 if [ -n "$INFRA_BOOKING_CORE_SSH_KEY" ] ; then
     # Prepare SSH key and settings to be able to pull TF modules from Github
@@ -49,14 +52,23 @@ for dir in ${TF_ACTION_WORKING_DIR_PATHS//:/ }; do
 
   # If not successful, post failed plan output.
   if [ $SUCCESS -ne 0 ]; then
-      COMMENT="#### \`terraform plan\` on $dir FAILED
+      COMMENT="#### \`terraform plan\` on $dir $RED FAILED
+  #############################
   \`\`\`
+  <details>
+  <summary>Cick to see details</summary>
   $OUTPUT
+  </details>
   \`\`\`"
   else
       FMT_PLAN=$(echo "$OUTPUT" | sed -r -e 's/^  \+/\+/g' | sed -r -e 's/^  ~/~/g' | sed -r -e 's/^  -/-/g')
       COMMENT="\`\`\`diff
+  #### \`terraform plan\` on $dir $GREEN SUCCEEDED
+  #############################
+  <details>
+  <summary>Cick to see details</summary>
   $FMT_PLAN
+  </details>
   \`\`\`"
   fi
 
