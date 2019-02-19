@@ -3,7 +3,7 @@ set -e
 set -x 
 
 if $AUTO_SEARCH_TF_DIR ; then
-    WORKING_DIRS=$(sh -c 'find . -type f -name "*.tf" -exec dirname {} \;|sort -u'  2>&1)
+    WORKING_DIRS=$(sh -c 'find . -type f -name "*.tf" -not -path "**/.*/*" -exec dirname {} \;|sort -u'  2>&1)
 else
     WORKING_DIRS="${TF_ACTION_WORKING_DIR:-.}"
 fi
