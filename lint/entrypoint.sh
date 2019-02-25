@@ -12,13 +12,13 @@ if [ -n "$INFRA_BOOKING_CORE_SSH_KEY" ] ; then
     mkdir -p $HOME/.ssh/
     echo "$INFRA_BOOKING_CORE_SSH_KEY" > $HOME/.ssh/id_rsa
     chmod 600 $HOME/.ssh/id_rsa
-    
+
     echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
     echo "Host github \n HostName github.com
     User git
     IdentityFile $HOME/.ssh/id_rsa
     IdentitiesOnly yes" >> /etc/ssh/ssh_config
-    
+
     git config --global url."git@github.com:".insteadOf "https://github.com/"
 fi
 
@@ -27,7 +27,7 @@ set +e
 SUCCESS=0
 for dir in $WORKING_DIRS; do
 if [ -n "$TF_ACTION_GET" ] ; then
-    LINT_COMMENT=$(sh -c "cd $dir && terraform get && tflint --error-with-issues" 2>&1);
+    LINT_COMMENT=$(sh -c "cd $dir && terraform get && tflint --error-with-issues $FLAGS" 2>&1);
 else
     LINT_COMMENT=$(sh -c "cd $dir && tflint --error-with-issues" 2>&1);
 fi
